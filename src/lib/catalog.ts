@@ -277,22 +277,32 @@ export const STATUS_LABEL: Record<ModelStatus, string> = {
 
 export const SUBSCRIPTION_PLANS = [
   {
-    id: "starter",
+    id: "essentiel",
     name: "Essentiel",
-    price: 4,
+    price: 3.99,
     period: "/ mois",
-    description: "Pour tester le site et utiliser les modèles courants sans dépasser le budget.",
+    description: "Chat, rédaction et code — modèles courants à 2 crédits par requête.",
     highlight: false,
-    features: ["Chat IA + code", "Images rapides", "Accès aux modèles économiques", "1 compte actif"],
+    features: [
+      "Chat IA + code",
+      "Modèles courants inclus",
+      "Aucun accès aux vidéos premium",
+      "Images limitées si le budget le permet",
+    ],
   },
   {
-    id: "pro",
-    name: "Pro",
-    price: 8.99,
+    id: "plus",
+    name: "Plus",
+    price: 7.99,
     period: "/ mois",
-    description: "Pour les usages réguliers, les tâches avancées et les créations plus ambitieuses.",
+    description: "Tous les modèles Essentiel, plus les modèles avancés et les images / vidéos premium selon les crédits du compte.",
     highlight: true,
-    features: ["Tout le plan Essentiel", "Crédits premium", "Images et vidéo avancées", "Priorité d’accès"],
+    features: [
+      "Tout le plan Essentiel",
+      "Modèles avancés inclus",
+      "Images premium et vidéos payées selon les crédits",
+      "Accès premium à la génération avancée",
+    ],
   },
 ] as const;
 
