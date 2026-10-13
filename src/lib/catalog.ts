@@ -31,14 +31,7 @@ export function isVoice(value: string): value is VoiceId {
 }
 
 export type ModelStatus = "disponible" | "premium" | "non-configure";
-export type ProviderKey =
-  | "openai"
-  | "anthropic"
-  | "google"
-  | "xai"
-  | "deepseek"
-  | "minimax"
-  | "bytedance";
+export type ProviderKey = "openai" | "anthropic" | "google" | "xai" | "deepseek" | "minimax" | "bytedance";
 
 export type CatalogEntry = {
   id: string;
@@ -60,6 +53,16 @@ export const PROVIDER_LABELS: Record<ProviderKey, string> = {
   deepseek: "DeepSeek",
   minimax: "MiniMax",
   bytedance: "ByteDance",
+};
+
+export const PROVIDER_META: Record<ProviderKey, { label: string; accent: string; dark: string }> = {
+  openai: { label: "OpenAI", accent: "#111111", dark: "#f3f4f6" },
+  anthropic: { label: "Anthropic", accent: "#f97316", dark: "#fff7ed" },
+  google: { label: "Google Gemini", accent: "#3b82f6", dark: "#eff6ff" },
+  xai: { label: "xAI", accent: "#111111", dark: "#f5f5f5" },
+  deepseek: { label: "DeepSeek", accent: "#2563eb", dark: "#dbeafe" },
+  minimax: { label: "MiniMax", accent: "#7c3aed", dark: "#f3e8ff" },
+  bytedance: { label: "ByteDance", accent: "#0f172a", dark: "#e2e8f0" },
 };
 
 export const LIVE_MODELS: CatalogEntry[] = [
@@ -254,13 +257,13 @@ export const UNCONFIGURED_MODELS: CatalogEntry[] = [
     href: null,
   },
   {
-    id: "claude-haiku-5-5",
-    name: "Claude Haiku 5.5",
+    id: "claude-opus-5-5",
+    name: "Claude Opus 5.5",
     provider: "Anthropic",
     providerKey: "anthropic",
-    use: "Économie · Rédaction",
+    use: "Premium · Analyse complexe",
     status: "non-configure",
-    blurb: "Modèle d’entrée de gamme disponible à confirmer selon le quota final et la configuration API.",
+    blurb: "Modèle premium réservé aux usages exigeants lorsque les accès API et les budgets sont validés.",
     cost: null,
     href: null,
   },
@@ -289,6 +292,8 @@ export const SUBSCRIPTION_PLANS = [
     period: "/ mois",
     description: "Pour les usages réguliers, les tâches avancées et les créations plus ambitieuses.",
     highlight: true,
-    features: ["Tout le plan Essentiel", "Crédits premium", "Images et vidéo avancées", "Priorité d’accès"] ,
+    features: ["Tout le plan Essentiel", "Crédits premium", "Images et vidéo avancées", "Priorité d’accès"],
   },
 ] as const;
+
+export const PROVIDER_ORDER: ProviderKey[] = ["openai", "anthropic", "google", "xai", "deepseek", "minimax", "bytedance"];
