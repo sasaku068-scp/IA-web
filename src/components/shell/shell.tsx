@@ -16,27 +16,43 @@ function MenuBar() {
   const credits = useAccountStore((state) => state.credits);
   const section = sectionLabel(pathname);
   const sessionReady = mounted && !isPending;
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    if (typeof window === "undefined") return "light";
+    return window.localStorage.getItem("saku-theme") === "dark" ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    document.body.dataset.theme = theme;
+    window.localStorage.setItem("saku-theme", theme);
+  }, [theme]);
 
   return (
-    <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line bg-surface px-3">
-      <Link to="/" aria-label="MOSAÏUM AI, accueil" className="shrink-0">
+    <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line bg-surface/80 px-3 backdrop-blur-sm">
+      <Link to="/" aria-label="SASAKU AI, accueil" className="shrink-0">
         <Wordmark />
       </Link>
       <span className="hidden h-4 w-px bg-line sm:block" aria-hidden />
-      <span className="hidden font-pixel text-micro text-muted sm:inline">v1.0</span>
+      <span className="hidden font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-muted sm:inline">v1.2</span>
       <span className="hidden h-4 w-px bg-line md:block" aria-hidden />
-      <span className="hidden font-pixel text-micro text-muted md:inline">FENETRE</span>
+      <span className="hidden font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-muted md:inline">espace</span>
       <span className="truncate font-sans text-sm text-ink">{section}</span>
       <div className="ml-auto flex items-center gap-2 sm:gap-3">
+        <button
+          type="button"
+          onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
+          className="inline-flex min-h-9 items-center rounded-full border border-line bg-panel px-2.5 font-sans text-[11px] font-medium uppercase tracking-[0.12em] text-ink"
+        >
+          {theme === "dark" ? "Clair" : "Sombre"}
+        </button>
         <Link
           to="/credits"
-          className="inline-flex min-h-9 items-center border border-line bg-cream px-2 font-sans text-xs font-medium text-ink tabular-nums"
+          className="inline-flex min-h-9 items-center rounded-full border border-line bg-primary-soft px-3 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-primary"
         >
-          {user && credits !== null ? `${credits} CR` : "CRÉDITS"}
+          {user && credits !== null ? `${credits} CR` : "Crédits"}
         </Link>
         <div className="account-slot min-h-8">
           {!sessionReady ? (
-            <div className="h-8 w-20 bg-panel" />
+            <div className="h-8 w-20 rounded-full bg-panel" />
           ) : user ? (
             <UserButton />
           ) : (
@@ -55,7 +71,7 @@ function SideNav() {
   return (
     <nav
       aria-label="Sections"
-      className="flex shrink-0 gap-1 overflow-x-auto border-b border-line bg-panel px-2 py-2 md:w-56 md:flex-col md:overflow-y-auto md:border-r md:border-b-0 md:px-3 md:py-4"
+      className="flex shrink-0 gap-1 overflow-x-auto border-b border-line bg-panel/80 px-2 py-2 md:w-60 md:flex-col md:overflow-y-auto md:border-r md:border-b-0 md:px-3 md:py-4"
     >
       {NAV.map((item) => {
         const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
@@ -95,16 +111,15 @@ function StatusBar() {
   }, []);
 
   const session = !mounted || isPending ? "Session…" : user ? "Session ouverte" : "Session requise";
-  const provider =
-    configured === null ? "Fournisseur…" : configured ? "xAI configuré" : "xAI non configuré";
+  const provider = configured === null ? "Fournisseur…" : configured ? "Connecteur actif" : "Connecteur inactif";
 
   return (
-    <footer className="flex h-7 shrink-0 items-center gap-3 border-t border-line bg-panel px-3 text-xs text-muted">
-      <span className="font-pixel text-micro text-ink">PRET</span>
+    <footer className="flex h-7 shrink-0 items-center gap-3 border-t border-line bg-panel/80 px-3 text-xs text-muted">
+      <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-ink">prêt</span>
       <span className="h-3 w-px bg-line" aria-hidden />
       <span>{session}</span>
       <span className="hidden sm:inline">{provider}</span>
-      <span className="ml-auto hidden md:inline">Thème clair</span>
+      <span className="ml-auto hidden md:inline">Mode adaptatif</span>
     </footer>
   );
 }
@@ -134,7 +149,7 @@ export function Shell({ children }: { children: ReactNode }) {
   }, [userId, reset, setAccount]);
 
   return (
-    <div className="flex h-dvh flex-col bg-cream text-ink">
+    <div className="flex h-dvh flex-col bg-bg text-ink">
       <MenuBar />
       <div className="flex min-h-0 flex-1 flex-col md:flex-row">
         <SideNav />

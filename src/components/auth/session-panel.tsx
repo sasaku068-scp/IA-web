@@ -3,25 +3,25 @@ import { Panel } from "@/components/ui/retro";
 
 export function SessionPanel() {
   return (
-    <Panel kicker="SESSION" className="mx-auto max-w-md">
-      <h1 className="font-display text-2xl leading-display text-ink">Connexion requise</h1>
+    <Panel kicker="SESSION" className="mx-auto max-w-md rounded-[26px] shadow-soft">
+      <h1 className="font-sans text-3xl font-semibold tracking-[-0.06em] text-ink">Connectez-vous</h1>
       <p className="mt-2 text-sm leading-relaxed text-muted">
-        Connectez-vous pour conserver vos conversations, vos générations et vos crédits. Google et X sont les accès
-        disponibles.
+        Accédez à votre espace IA personnel, vos historiques, vos crédits et vos créations en un seul clic.
       </p>
-      <div className="mt-5 flex flex-col gap-3">
+      <div className="mt-5 grid gap-3">
         {GROK_PROVIDERS.map((provider) => (
           <button
             key={provider.providerId}
             type="button"
-            className="retro-btn retro-btn-primary"
+            className="retro-btn retro-btn-primary justify-between rounded-full"
             onClick={() =>
               signIn(provider.providerId, {
                 callbackURL: `${window.location.pathname}${window.location.search}`,
               })
             }
           >
-            Continuer avec {provider.label}
+            <span>Continuer avec {provider.label}</span>
+            <span aria-hidden>→</span>
           </button>
         ))}
       </div>
@@ -31,11 +31,11 @@ export function SessionPanel() {
 
 export function SessionSkeleton() {
   return (
-    <div className="mx-auto max-w-md border border-line bg-surface p-4" aria-hidden>
-      <div className="h-3 w-24 bg-panel" />
-      <div className="mt-4 h-8 w-56 bg-panel" />
-      <div className="mt-3 h-16 w-full bg-panel" />
-      <div className="mt-5 h-11 w-full bg-violet-soft" />
+    <div className="mx-auto max-w-md rounded-[24px] border border-line bg-surface p-4 shadow-card" aria-hidden>
+      <div className="h-3 w-28 rounded-full bg-panel" />
+      <div className="mt-4 h-9 w-56 rounded-full bg-panel" />
+      <div className="mt-3 h-18 w-full rounded-2xl bg-panel" />
+      <div className="mt-5 h-12 w-full rounded-full bg-primary-soft" />
     </div>
   );
 }
