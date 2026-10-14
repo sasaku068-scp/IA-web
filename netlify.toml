@@ -1,0 +1,19 @@
+[build]
+  command = "npm run build"
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA / client routes — fallback si le build client est servi en statique
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"]}
+
+# Note: TanStack Start / Nitro peut publier aussi un serveur.
+# Sur Netlify, si le build échoue sur SSR, utilise le preset client-only
+# ou branche un adapter Netlify plus tard. Pour tester le front :
+# Build command: npm run build
+# Publish: dist/client (ou dist selon la sortie Vite)
