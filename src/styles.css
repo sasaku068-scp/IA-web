@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 /* Blue / white fluid animated theme with gentle wave background.
-   This file replaces the previous theme to provide a calmer, flowing
-   look (animated SVG waves + blue/white palette). Animations respect
-   prefers-reduced-motion. */
+   Waves now appear site-wide as a subtle moving overlay (CSS SVG pattern)
+   and buttons have refined, accessible styles with variants.
+   Animations respect prefers-reduced-motion. */
 
 @theme {
   --color-bg: #f5f9ff;
@@ -12,6 +12,7 @@
   --color-muted: #5b6b82;
   --color-line: rgba(15, 23, 36, 0.06);
   --color-primary: #2b6ef6; /* vivid blue */
+  --color-primary-600: #1f55d6;
   --color-primary-soft: rgba(43, 110, 246, 0.12);
   --color-accent: #7ea8ff;
   --color-panel: #f8fbff;
@@ -39,11 +40,26 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background 220ms ease, color 220ms ease;
+    position: relative;
+    z-index: 0;
   }
 
-  button:not(:disabled),
-  [role="button"]:not(:disabled) {
-    cursor: pointer;
+  /* Subtle site-wide wave overlay using inline SVG as a repeating background.
+     The opacity and movement are low-impact; pointer-events none so it never
+     intercepts clicks. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='200' viewBox='0 0 1600 200'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23e8f2ff'/><stop offset='1' stop-color='%23f8fbff'/></linearGradient></defs><path fill='%23e8f2ff' d='M0,80 C200,120 400,40 800,80 C1200,120 1400,80 1600,100 L1600 200 L0 200 Z'/></svg>");
+    background-repeat: repeat-x;
+    background-position: bottom left;
+    background-size: 1200px 160px;
+    opacity: 0.06;
+    transform: translate3d(0,0,0);
+    animation: site-wave-move 28s linear infinite;
   }
 
   ::selection {
@@ -57,17 +73,27 @@
   }
 }
 
-/* HERO / WAVES */
+@keyframes site-wave-move {
+  from { background-position: 0% bottom; }
+  to { background-position: -25% bottom; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none !important; }
+}
+
+/* HERO / WAVES (retained for hero sections but kept above the site-wave layer) */
 .hero {
   position: relative;
   overflow: hidden;
   padding-top: 3.25rem;
   padding-bottom: 3.25rem;
+  z-index: 2; /* make sure hero content sits above site-wide waves */
 }
 
 .hero-inner {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 .waves {
@@ -80,6 +106,7 @@
   transform: translate3d(0, 0, 0);
   opacity: 0.95;
   pointer-events: none;
+  z-index: 2;
 }
 
 .wave-path {
@@ -108,32 +135,80 @@
   .waves .wave-1, .waves .wave-2, .waves .wave-3, .waves .swell { animation: none !important; }
 }
 
-/* Cards, buttons, fields */
+/* Cards */
 .card {
   background: var(--color-surface);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-line);
   box-shadow: var(--shadow-card);
+  z-index: 3; /* on top of site-wave */
 }
 
-.retro-btn {
+/* Button system: primary, secondary, ghost, icon */
+.btn {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
   min-height: 3rem;
-  padding: 0.7rem 1rem;
+  padding: 0.65rem 1rem;
   border-radius: 999px;
-  border: 1px solid transparent;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  color: white;
   font-weight: 700;
-  box-shadow: 0 6px 18px rgba(43,110,246,0.12);
-  transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+  border: 1px solid transparent;
+  transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms ease, opacity 160ms ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.retro-btn:hover { transform: translateY(-3px); }
-.retro-btn:active { transform: translateY(0); }
+.btn:active { transform: translateY(0); }
 
+.btn--primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: white;
+  box-shadow: 0 8px 24px rgba(43,110,246,0.12);
+  border-color: transparent;
+}
+
+.btn--primary:hover { transform: translateY(-3px); }
+
+.btn--secondary {
+  background: linear-gradient(180deg, #ffffff, #fbfdff);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 6px 16px rgba(15,23,36,0.04);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-primary-600);
+  border: 1px solid transparent;
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--color-line);
+  color: var(--color-ink);
+}
+
+.btn--icon {
+  padding: 0.5rem;
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  border-radius: 10px;
+}
+
+.btn:disabled, .btn[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Retro compatibility helpers: keep .retro-btn classname mapping */
+.retro-btn { /* keep for components using that class */ }
+.retro-btn-primary { }
+
+/* Inputs */
 .retro-field {
   width: 100%;
   border-radius: var(--radius-sm);
@@ -142,15 +217,6 @@
   padding: 0.9rem 1rem;
   color: var(--color-ink);
   box-shadow: none;
-}
-
-/* Utility */
-.centered-hero {
-  max-width: 980px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
 }
 
 /* Small responsive tweaks */
