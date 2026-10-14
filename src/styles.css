@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
-/* Mosaium IA — premium SaaS identity
-   Light, clean, violet accent. Inspired by Linear + modern AI product pages.
-   No neon, no excess gradients, no childish elements. */
+/* Mosaium IA — noir + orange
+   Fond interactif de petites cases qui s’illuminent en orange.
+   Style sérieux, contrasté, pas “IA générique”. */
 
 @theme {
-  --color-bg: #faf9fb;
-  --color-surface: #ffffff;
-  --color-ink: #0f0e13;
-  --color-muted: #5c5a66;
-  --color-line: rgba(15, 14, 19, 0.07);
-  --color-primary: #6d28d9; /* Mosaium violet */
-  --color-primary-600: #5b21b6;
-  --color-primary-soft: rgba(109, 40, 217, 0.10);
-  --color-accent: #a78bfa;
-  --color-panel: #f5f3f8;
+  --color-bg: #0a0a0b;
+  --color-surface: #121214;
+  --color-ink: #f4f4f5;
+  --color-muted: #a1a1aa;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-primary: #f97316; /* orange vif */
+  --color-primary-600: #ea580c;
+  --color-primary-soft: rgba(249, 115, 22, 0.12);
+  --color-accent: #fb923c;
+  --color-panel: #18181b;
   --font-sans: "Inter", "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
   --font-display: "Inter", "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
-  --radius-lg: 20px;
+  --radius-lg: 16px;
   --radius-md: 12px;
   --radius-sm: 8px;
-  --shadow-soft: 0 12px 30px rgba(15, 14, 19, 0.05);
-  --shadow-card: 0 8px 20px rgba(15, 14, 19, 0.04);
+  --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 @layer base {
@@ -33,24 +33,13 @@
 
   body {
     min-height: 100%;
-    background: linear-gradient(180deg, #fdfcff 0%, var(--color-bg) 40%);
+    background: var(--color-bg);
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background 220ms ease, color 220ms ease;
     position: relative;
     z-index: 0;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(109, 40, 217, 0.06), transparent);
-    opacity: 1;
   }
 
   ::selection {
@@ -59,7 +48,7 @@
   }
 
   :focus-visible {
-    outline: 3px solid rgba(109, 40, 217, 0.22);
+    outline: 2px solid var(--color-primary);
     outline-offset: 3px;
   }
 }
@@ -73,44 +62,50 @@
   z-index: 3;
 }
 
-/* Button system */
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  min-height: 3rem;
-  padding: 0.65rem 1rem;
-  border-radius: 999px;
-  font-weight: 700;
+  min-height: 2.75rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  font-weight: 600;
   border: 1px solid transparent;
-  transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms ease, opacity 160ms ease;
+  transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease, background 150ms ease;
   cursor: pointer;
   user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.btn:active { transform: translateY(0); }
+.btn:active {
+  transform: translateY(1px);
+}
 
 .btn--primary {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  color: white;
-  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.18);
-  border-color: transparent;
+  background: var(--color-primary);
+  color: #0a0a0b;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.25);
 }
 
-.btn--primary:hover { transform: translateY(-2px); }
+.btn--primary:hover {
+  background: var(--color-primary-600);
+  box-shadow: 0 6px 28px rgba(249, 115, 22, 0.35);
+}
 
 .btn--secondary {
-  background: linear-gradient(180deg, #ffffff, #faf9fb);
+  background: var(--color-surface);
   color: var(--color-ink);
   border: 1px solid var(--color-line);
-  box-shadow: 0 6px 16px rgba(15, 14, 19, 0.03);
+}
+
+.btn--secondary:hover {
+  border-color: rgba(249, 115, 22, 0.4);
+  background: var(--color-panel);
 }
 
 .btn--ghost {
   background: transparent;
-  color: var(--color-primary-600);
-  border: 1px solid transparent;
+  color: var(--color-primary);
 }
 
 .btn--outline {
@@ -119,31 +114,24 @@
   color: var(--color-ink);
 }
 
-.btn--icon {
-  padding: 0.5rem;
-  min-width: 2.4rem;
-  min-height: 2.4rem;
-  border-radius: 10px;
-}
-
-.btn:disabled, .btn[aria-disabled='true'] {
-  opacity: 0.5;
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-.retro-btn { }
-.retro-btn-primary { }
+.retro-btn {}
+.retro-btn-primary {}
 
 .retro-field {
   width: 100%;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-line);
-  background: #fdfcff;
-  padding: 0.9rem 1rem;
+  background: var(--color-panel);
+  padding: 0.85rem 1rem;
   color: var(--color-ink);
-  box-shadow: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

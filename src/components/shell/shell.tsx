@@ -1,163 +1,74 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
-import { UserButton } from "@/lib/auth/gates";
-import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { Wordmark } from "@/components/brand/mark";
+import { useLocation } from "@tanstack/react-router";
+import { InteractiveGrid } from "@/components/ui/interactive-grid";
+import { NAV, sectionLabel } from "./nav";
+import { Link } from "@tanstack/react-router";
 import { PixelIcon } from "@/components/pixel/icons";
-import { NAV, sectionLabel } from "@/components/shell/nav";
-import { useAccountStore } from "@/lib/account-store";
-import { getAccount, providerStatus } from "@/lib/mosaium.functions";
-import { useMounted } from "@/lib/use-mounted";
+import { cn } from "@/lib/cn";
 
-function MenuBar() {
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const { user, isPending } = useCurrentUserState();
-  const mounted = useMounted();
-  const credits = useAccountStore((state) => state.credits);
-  const section = sectionLabel(pathname);
-  const sessionReady = mounted && !isPending;
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    if (typeof window === "undefined") return "light";
-    return window.localStorage.getItem("saku-theme") === "dark" ? "dark" : "light";
-  });
-
-  useEffect(() => {
-    document.body.dataset.theme = theme;
-    window.localStorage.setItem("saku-theme", theme);
-  }, [theme]);
+export function Shell({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const current = sectionLabel(location.pathname);
 
   return (
-    <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line bg-surface/80 px-3 backdrop-blur-sm">
-      <Link to="/" aria-label="SASAKU AI, accueil" className="shrink-0">
-        <Wordmark />
-      </Link>
-      <span className="hidden h-4 w-px bg-line sm:block" aria-hidden />
-      <span className="hidden font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-muted sm:inline">v1.2</span>
-      <span className="hidden h-4 w-px bg-line md:block" aria-hidden />
-      <span className="hidden font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-muted md:inline">espace</span>
-      <span className="truncate font-sans text-sm text-ink">{section}</span>
-      <div className="ml-auto flex items-center gap-2 sm:gap-3">
-        <button
-          type="button"
-          onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
-          className="inline-flex min-h-9 items-center rounded-full border border-line bg-panel px-2.5 font-sans text-[11px] font-medium uppercase tracking-[0.12em] text-ink"
-        >
-          {theme === "dark" ? "Clair" : "Sombre"}
-        </button>
-        <Link
-          to="/credits"
-          className="inline-flex min-h-9 items-center rounded-full border border-line bg-primary-soft px-3 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-primary"
-        >
-          {user && credits !== null ? `${credits} CR` : "Crédits"}
-        </Link>
-        <div className="account-slot min-h-8">
-          {!sessionReady ? (
-            <div className="h-8 w-20 rounded-full bg-panel" />
-          ) : user ? (
-            <UserButton />
-          ) : (
-            <Link to="/login" className="font-sans text-sm text-ink underline-offset-2 hover:underline">
-              Connexion
+    <div className="relative min-h-screen">
+      <InteractiveGrid cellSize={26} gap={2} />
+
+      <div className="relative z-10 flex min-h-screen flex-col">
+        {/* Top bar */}
+        <header className="sticky top-0 z-40 border-b border-[var(--color-line)] bg-[var(--color-bg)]/80 backdrop-blur-md">
+          <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+            <Link to="/" className="flex items-center gap-2.5 font-semibold tracking-tight text-[var(--color-ink)]">
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--color-primary)] text-xs font-bold text-[#0a0a0b]">
+                M
+              </span>
+              <span>Mosaium IA</span>
             </Link>
-          )}
+
+            <nav className="hidden items-center gap-1 md:flex">
+              {NAV.filter((item) =>
+                ["/", "/chat", "/models", "/pricing", "/credits"].includes(item.to),
+              ).map((item) => {
+                const active =
+                  item.to === "/"
+                    ? location.pathname === "/"
+                    : location.pathname.startsWith(item.to);
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className={cn(
+                      "rounded-lg px-3 py-1.5 text-sm font-medium transition",
+                      active
+                        ? "bg-[var(--color-primary-soft)] text-[var(--color-primary)]"
+                        : "text-[var(--color-muted)] hover:text-[var(--color-ink)]",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <Link
+              to="/login"
+              className="rounded-lg bg-[var(--color-primary)] px-3.5 py-1.5 text-sm font-semibold text-[#0a0a0b] transition hover:bg-[var(--color-primary-600)]"
+            >
+              Se connecter
+            </Link>
+          </div>
+        </header>
+
+        {/* Mobile section title */}
+        <div className="border-b border-[var(--color-line)] px-4 py-2 md:hidden">
+          <p className="text-xs font-medium uppercase tracking-wider text-[var(--color-muted)]">{current}</p>
         </div>
+
+        <main className="flex-1">{children}</main>
+
+        <footer className="border-t border-[var(--color-line)] py-6 text-center text-xs text-[var(--color-muted)]">
+          Mosaium IA · Abonnements clairs · Crédits transparents
+        </footer>
       </div>
-    </header>
-  );
-}
-
-function SideNav() {
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
-  return (
-    <nav
-      aria-label="Sections"
-      className="flex shrink-0 gap-1 overflow-x-auto border-b border-line bg-panel/80 px-2 py-2 md:w-60 md:flex-col md:overflow-y-auto md:border-r md:border-b-0 md:px-3 md:py-4"
-    >
-      {NAV.map((item) => {
-        const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
-        return (
-          <Link
-            key={item.to}
-            to={item.to}
-            activeOptions={{ exact: item.to === "/" }}
-            className={active ? "nav-link is-active" : "nav-link"}
-          >
-            <span className="tick" aria-hidden />
-            <PixelIcon name={item.icon} />
-            <span className="font-sans text-sm font-medium">{item.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}
-
-function StatusBar() {
-  const { user, isPending } = useCurrentUserState();
-  const mounted = useMounted();
-  const [configured, setConfigured] = useState<boolean | null>(null);
-  useEffect(() => {
-    let cancel = false;
-    providerStatus()
-      .then((status) => {
-        if (!cancel) setConfigured(status.configured);
-      })
-      .catch(() => {
-        if (!cancel) setConfigured(null);
-      });
-    return () => {
-      cancel = true;
-    };
-  }, []);
-
-  const session = !mounted || isPending ? "Session…" : user ? "Session ouverte" : "Session requise";
-  const provider = configured === null ? "Fournisseur…" : configured ? "Connecteur actif" : "Connecteur inactif";
-
-  return (
-    <footer className="flex h-7 shrink-0 items-center gap-3 border-t border-line bg-panel/80 px-3 text-xs text-muted">
-      <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-ink">prêt</span>
-      <span className="h-3 w-px bg-line" aria-hidden />
-      <span>{session}</span>
-      <span className="hidden sm:inline">{provider}</span>
-      <span className="ml-auto hidden md:inline">Mode adaptatif</span>
-    </footer>
-  );
-}
-
-export function Shell({ children }: { children: ReactNode }) {
-  const { user } = useCurrentUserState();
-  const userId = user?.id ?? null;
-  const setAccount = useAccountStore((state) => state.setAccount);
-  const reset = useAccountStore((state) => state.reset);
-
-  useEffect(() => {
-    if (!userId) {
-      reset();
-      return;
-    }
-    let cancel = false;
-    getAccount()
-      .then((account) => {
-        if (!cancel) setAccount(account);
-      })
-      .catch(() => {
-        if (!cancel) reset();
-      });
-    return () => {
-      cancel = true;
-    };
-  }, [userId, reset, setAccount]);
-
-  return (
-    <div className="flex h-dvh flex-col bg-bg text-ink">
-      <MenuBar />
-      <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-        <SideNav />
-        <main id="contenu" className="min-h-0 min-w-0 flex-1 overflow-hidden">
-          {children}
-        </main>
-      </div>
-      <StatusBar />
     </div>
   );
 }
