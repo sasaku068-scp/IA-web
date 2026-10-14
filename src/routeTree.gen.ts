@@ -18,6 +18,7 @@ import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ImagesRouteImport } from './routes/images'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ModelsRouteImport } from './routes/models'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as VideosRouteImport } from './routes/videos'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -67,6 +68,11 @@ const ModelsRoute = ModelsRouteImport.update({
   path: '/models',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/images': typeof ImagesRoute
   '/login': typeof LoginRoute
   '/models': typeof ModelsRoute
+  '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/videos': typeof VideosRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/images': typeof ImagesRoute
   '/login': typeof LoginRoute
   '/models': typeof ModelsRoute
+  '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/videos': typeof VideosRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/images': typeof ImagesRoute
   '/login': typeof LoginRoute
   '/models': typeof ModelsRoute
+  '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/videos': typeof VideosRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/images'
     | '/login'
     | '/models'
+    | '/pricing'
     | '/settings'
     | '/videos'
     | '/api/auth/$'
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/images'
     | '/login'
     | '/models'
+    | '/pricing'
     | '/settings'
     | '/videos'
     | '/api/auth/$'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/images'
     | '/login'
     | '/models'
+    | '/pricing'
     | '/settings'
     | '/videos'
     | '/api/auth/$'
@@ -181,6 +193,7 @@ export interface RootRouteChildren {
   ImagesRoute: typeof ImagesRoute
   LoginRoute: typeof LoginRoute
   ModelsRoute: typeof ModelsRoute
+  PricingRoute: typeof PricingRoute
   SettingsRoute: typeof SettingsRoute
   VideosRoute: typeof VideosRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModelsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -285,6 +305,7 @@ const rootRouteChildren: RootRouteChildren = {
   ImagesRoute: ImagesRoute,
   LoginRoute: LoginRoute,
   ModelsRoute: ModelsRoute,
+  PricingRoute: PricingRoute,
   SettingsRoute: SettingsRoute,
   VideosRoute: VideosRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
