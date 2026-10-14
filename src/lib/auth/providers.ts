@@ -1,23 +1,20 @@
 /**
- * Upstream identity providers the app offers for sign-in (via the broker).
+ * Providers proposés à l'écran de connexion.
  *
- * Keep this file minimal — the app shows sign-in buttons from this list, and
- * the broker/service must support each upstream. Adding an entry here only
- * exposes the button; the broker must be configured with the real secrets.
+ * - `mode: "oauth2"` → broker Grok (genericOAuth)
+ * - `mode: "social"` → better-auth social natif (Google / Apple locaux)
  */
 export type GrokProvider = {
-  /** This app's local provider id; also the callback path segment. */
   providerId: string;
-  /** Upstream hint the broker forwards to (Better Auth social id). */
   idp: string;
-  /** Human label for the sign-in button. */
   label: string;
+  mode: "oauth2" | "social";
 };
 
 export const GROK_PROVIDERS: readonly GrokProvider[] = [
-  { providerId: "grok-google", idp: "google", label: "Google" },
-  { providerId: "grok-x", idp: "twitter", label: "X" },
-  { providerId: "grok-apple", idp: "apple", label: "Apple" },
-  { providerId: "grok-github", idp: "github", label: "GitHub" },
-  { providerId: "grok-microsoft", idp: "microsoft", label: "Microsoft" },
+  { providerId: "google", idp: "google", label: "Google", mode: "social" },
+  { providerId: "apple", idp: "apple", label: "Apple", mode: "social" },
+  { providerId: "grok-x", idp: "twitter", label: "X", mode: "oauth2" },
+  { providerId: "grok-github", idp: "github", label: "GitHub", mode: "oauth2" },
+  { providerId: "grok-microsoft", idp: "microsoft", label: "Microsoft", mode: "oauth2" },
 ];
