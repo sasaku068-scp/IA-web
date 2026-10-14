@@ -43,6 +43,7 @@ export type CatalogEntry = {
   blurb: string;
   cost: number | null;
   href: "/chat" | "/code" | "/images" | "/videos" | "/audio" | "/pricing" | null;
+  category?: "Raisonnement" | "Code" | "Assistant" | "Multimédia" | "Rédaction";
 };
 
 export const PROVIDER_LABELS: Record<ProviderKey, string> = {
@@ -73,9 +74,10 @@ export const LIVE_MODELS: CatalogEntry[] = [
     providerKey: "openai",
     use: "Chat · Raisonnement · Code",
     status: "disponible",
-    blurb: "Modèle économique pour les tâches courantes, le support quotidien et les demandes rapides.",
+    blurb: "Modèle polyvalent pour les tâches courantes, le support quotidien et les demandes rapides.",
     cost: COSTS.chat,
     href: "/chat",
+    category: "Assistant",
   },
   {
     id: "gpt-6-1-sol",
@@ -87,6 +89,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Le modèle principal de développement et de rédaction avec un bon équilibre entre vitesse et précision.",
     cost: COSTS.chat,
     href: "/code",
+    category: "Code",
   },
   {
     id: "gpt-6-astra",
@@ -98,6 +101,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Pour les tâches complexes, les analyses longues et les situations nécessitant une vraie profondeur.",
     cost: 3,
     href: "/pricing",
+    category: "Raisonnement",
   },
   {
     id: "claude-haiku-5-5",
@@ -109,6 +113,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Idéal pour les demandes rapides, le résumé, les idées et le traitement de contenu texte léger.",
     cost: COSTS.chat,
     href: "/chat",
+    category: "Rédaction",
   },
   {
     id: "claude-sonnet-5-5",
@@ -120,6 +125,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Modèle polyvalent pour l’écriture, le code et les tâches de production au quotidien.",
     cost: 3,
     href: "/code",
+    category: "Code",
   },
   {
     id: "claude-opus-5-5",
@@ -131,6 +137,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Pour les sujets exigeants, les synthèses profondes et les décisions complexes.",
     cost: 5,
     href: "/pricing",
+    category: "Raisonnement",
   },
   {
     id: "gemini-3-8-flash",
@@ -142,6 +149,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Modèle principal polyvalent pour les conversations, les réponses multimodales et les analyses rapides.",
     cost: COSTS.chat,
     href: "/chat",
+    category: "Assistant",
   },
   {
     id: "grok-4.7",
@@ -153,6 +161,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Le modèle de base du site, pensé pour la conversation, le raisonnement et les tâches courantes.",
     cost: COSTS.chat,
     href: "/chat",
+    category: "Assistant",
   },
   {
     id: "deepseek-v4-1-flash",
@@ -164,6 +173,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Option rapide et économique pour le développement et les tâches longues de traitement de texte.",
     cost: 2,
     href: "/code",
+    category: "Code",
   },
   {
     id: "nano-banana-2-1",
@@ -175,6 +185,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Le choix principal pour la génération d’images avec un bon équilibre qualité / vitesse.",
     cost: COSTS.image,
     href: "/images",
+    category: "Multimédia",
   },
   {
     id: "h3-max",
@@ -186,6 +197,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Option vidéo à privilégier pour les premiers essais, avec un excellent compromis entrée / rendu.",
     cost: COSTS.video,
     href: "/videos",
+    category: "Multimédia",
   },
   {
     id: "veo-3-1",
@@ -197,6 +209,7 @@ export const LIVE_MODELS: CatalogEntry[] = [
     blurb: "Variation premium pour la génération vidéo avancée, à tester selon les budgets et le débit réel.",
     cost: COSTS.video,
     href: "/videos",
+    category: "Multimédia",
   },
 ];
 
@@ -256,17 +269,6 @@ export const UNCONFIGURED_MODELS: CatalogEntry[] = [
     cost: null,
     href: null,
   },
-  {
-    id: "claude-opus-5-5",
-    name: "Claude Opus 5.5",
-    provider: "Anthropic",
-    providerKey: "anthropic",
-    use: "Premium · Analyse complexe",
-    status: "non-configure",
-    blurb: "Modèle premium réservé aux usages exigeants lorsque les accès API et les budgets sont validés.",
-    cost: null,
-    href: null,
-  },
 ];
 
 export const STATUS_LABEL: Record<ModelStatus, string> = {
@@ -275,35 +277,67 @@ export const STATUS_LABEL: Record<ModelStatus, string> = {
   "non-configure": "Non configuré",
 };
 
+/** Plans d'abonnement Mosaium IA — source unique de vérité */
 export const SUBSCRIPTION_PLANS = [
   {
     id: "essentiel",
-    name: "Essentiel",
-    price: 3.99,
-    period: "/ mois",
-    description: "Chat, rédaction et code — modèles courants à 2 crédits par requête.",
+    name: "Mosaium Essentiel",
+    shortName: "Essentiel",
+    price: 2.99,
+    period: "/mois",
+    tagline: "Les IA essentielles pour apprendre, créer et coder au quotidien.",
+    description:
+      "Accède à une sélection d'IA pour tes questions quotidiennes, tes projets, la rédaction, l'apprentissage et le développement. Une formule accessible pour profiter de Mosaium IA sans dépenser trop.",
+    credits: 300,
     highlight: false,
+    badge: null as string | null,
+    featuredModelIds: ["gpt-6-luna", "claude-haiku-5-5", "deepseek-v4-1-flash"],
+    extraModelIds: ["gemini-3-8-flash", "grok-4.7"],
     features: [
-      "Chat IA + code",
-      "Modèles courants inclus",
-      "Aucun accès aux vidéos premium",
-      "Images limitées si le budget le permet",
+      "300 crédits chaque mois",
+      "Accès aux modèles économiques du catalogue",
+      "Expérience simple pour discuter, rédiger, apprendre et programmer",
+      "Choix du modèle selon tes besoins",
+      "Compteur de crédits dans l'espace utilisateur",
+      "Estimation du coût en crédits pour les opérations coûteuses",
     ],
+    cta: "Choisir Essentiel",
   },
   {
     id: "plus",
-    name: "Plus",
+    name: "Mosaium Plus",
+    shortName: "Plus",
     price: 7.99,
-    period: "/ mois",
-    description: "Tous les modèles Essentiel, plus les modèles avancés et les images / vidéos premium selon les crédits du compte.",
+    period: "/mois",
+    tagline: "Plus de puissance, plus de possibilités, plus de liberté pour tes projets.",
+    description:
+      "Profite d'un catalogue élargi d'IA pour approfondir ton raisonnement, développer des projets plus ambitieux et accéder aux modèles avancés compatibles avec Mosaium IA.",
+    credits: 900,
     highlight: true,
+    badge: "LE PLUS COMPLET",
+    featuredModelIds: ["gpt-6-astra", "claude-opus-5-5", "veo-3-1"],
+    extraModelIds: ["gpt-6-1-sol", "claude-sonnet-5-5", "nano-banana-2-1", "h3-max"],
     features: [
-      "Tout le plan Essentiel",
-      "Modèles avancés inclus",
-      "Images premium et vidéos payées selon les crédits",
-      "Accès premium à la génération avancée",
+      "900 crédits chaque mois",
+      "Toutes les fonctionnalités d'Essentiel",
+      "7 modèles avancés supplémentaires",
+      "Sélection adaptée au raisonnement, au développement et à la création multimédia",
+      "Suivi clair des crédits consommés",
+      "Informations transparentes sur le coût des opérations gourmandes",
     ],
+    cta: "Passer à Plus",
   },
 ] as const;
+
+export type PlanId = (typeof SUBSCRIPTION_PLANS)[number]["id"];
+
+export function getModelsForPlan(planId: PlanId) {
+  const plan = SUBSCRIPTION_PLANS.find((p) => p.id === planId);
+  if (!plan) return { featured: [], extra: [], all: [] };
+  const byId = Object.fromEntries(LIVE_MODELS.map((m) => [m.id, m]));
+  const featured = plan.featuredModelIds.map((id) => byId[id]).filter(Boolean);
+  const extra = plan.extraModelIds.map((id) => byId[id]).filter(Boolean);
+  return { featured, extra, all: [...featured, ...extra] };
+}
 
 export const PROVIDER_ORDER: ProviderKey[] = ["openai", "anthropic", "google", "xai", "deepseek", "minimax", "bytedance"];
