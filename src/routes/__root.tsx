@@ -3,7 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "SASAKU AI";
+const APP_NAME = "Mosaium IA";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -13,9 +13,9 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       {
         name: "description",
-        content: "SASAKU AI — chat, image, vidéo, audio et modèles IA dans un espace élégant et serein.",
+        content: "Mosaium IA — chat, code, images, vidéo et modèles IA dans un espace professionnel et clair.",
       },
-      { name: "theme-color", content: "#f3efe9" },
+      { name: "theme-color", content: "#6d28d9" },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },

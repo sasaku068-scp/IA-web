@@ -8,6 +8,7 @@ export const NAV = [
   { to: "/videos", label: "Vidéos", icon: "video" },
   { to: "/audio", label: "Audio", icon: "audio" },
   { to: "/models", label: "Modèles", icon: "models" },
+  { to: "/pricing", label: "Abonnements", icon: "credits" },
   { to: "/history", label: "Historique", icon: "history" },
   { to: "/credits", label: "Crédits", icon: "credits" },
   { to: "/settings", label: "Paramètres", icon: "settings" },
@@ -17,7 +18,7 @@ export type NavPath = (typeof NAV)[number]["to"];
 
 export function sectionLabel(pathname: string): string {
   const match = NAV.find((item) => (item.to === "/" ? pathname === "/" : pathname.startsWith(item.to)));
-  return match?.label ?? "MOSAÏUM";
+  return match?.label ?? "Mosaium IA";
 }
 
 export function iconFor(pathname: string): PixelIconName {

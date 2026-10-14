@@ -1,29 +1,28 @@
 @import "tailwindcss";
 
-/* Blue / white fluid animated theme with gentle wave background.
-   Waves now appear site-wide as a subtle moving overlay (CSS SVG pattern)
-   and buttons have refined, accessible styles with variants.
-   Animations respect prefers-reduced-motion. */
+/* Mosaium IA — premium SaaS identity
+   Light, clean, violet accent. Inspired by Linear + modern AI product pages.
+   No neon, no excess gradients, no childish elements. */
 
 @theme {
-  --color-bg: #f5f9ff;
+  --color-bg: #faf9fb;
   --color-surface: #ffffff;
-  --color-ink: #0f1724;
-  --color-muted: #5b6b82;
-  --color-line: rgba(15, 23, 36, 0.06);
-  --color-primary: #2b6ef6; /* vivid blue */
-  --color-primary-600: #1f55d6;
-  --color-primary-soft: rgba(43, 110, 246, 0.12);
-  --color-accent: #7ea8ff;
-  --color-panel: #f8fbff;
+  --color-ink: #0f0e13;
+  --color-muted: #5c5a66;
+  --color-line: rgba(15, 14, 19, 0.07);
+  --color-primary: #6d28d9; /* Mosaium violet */
+  --color-primary-600: #5b21b6;
+  --color-primary-soft: rgba(109, 40, 217, 0.10);
+  --color-accent: #a78bfa;
+  --color-panel: #f5f3f8;
   --font-sans: "Inter", "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
   --font-display: "Inter", "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
   --radius-lg: 20px;
   --radius-md: 12px;
   --radius-sm: 8px;
-  --shadow-soft: 0 12px 30px rgba(15, 23, 36, 0.06);
-  --shadow-card: 0 8px 18px rgba(15, 23, 36, 0.06);
+  --shadow-soft: 0 12px 30px rgba(15, 14, 19, 0.05);
+  --shadow-card: 0 8px 20px rgba(15, 14, 19, 0.04);
 }
 
 @layer base {
@@ -34,7 +33,7 @@
 
   body {
     min-height: 100%;
-    background: linear-gradient(180deg, #f8fbff 0%, var(--color-bg) 40%);
+    background: linear-gradient(180deg, #fdfcff 0%, var(--color-bg) 40%);
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -44,22 +43,14 @@
     z-index: 0;
   }
 
-  /* Subtle site-wide wave overlay using inline SVG as a repeating background.
-     The opacity and movement are low-impact; pointer-events none so it never
-     intercepts clicks. */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='200' viewBox='0 0 1600 200'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23e8f2ff'/><stop offset='1' stop-color='%23f8fbff'/></linearGradient></defs><path fill='%23e8f2ff' d='M0,80 C200,120 400,40 800,80 C1200,120 1400,80 1600,100 L1600 200 L0 200 Z'/></svg>");
-    background-repeat: repeat-x;
-    background-position: bottom left;
-    background-size: 1200px 160px;
-    opacity: 0.06;
-    transform: translate3d(0,0,0);
-    animation: site-wave-move 28s linear infinite;
+    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(109, 40, 217, 0.06), transparent);
+    opacity: 1;
   }
 
   ::selection {
@@ -68,71 +59,9 @@
   }
 
   :focus-visible {
-    outline: 3px solid rgba(43, 110, 246, 0.18);
+    outline: 3px solid rgba(109, 40, 217, 0.22);
     outline-offset: 3px;
   }
-}
-
-@keyframes site-wave-move {
-  from { background-position: 0% bottom; }
-  to { background-position: -25% bottom; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body::before { animation: none !important; }
-}
-
-/* HERO / WAVES (retained for hero sections but kept above the site-wave layer) */
-.hero {
-  position: relative;
-  overflow: hidden;
-  padding-top: 3.25rem;
-  padding-bottom: 3.25rem;
-  z-index: 2; /* make sure hero content sits above site-wide waves */
-}
-
-.hero-inner {
-  position: relative;
-  z-index: 3;
-}
-
-.waves {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -2px;
-  width: 200%;
-  height: 260px;
-  transform: translate3d(0, 0, 0);
-  opacity: 0.95;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.wave-path {
-  transform-origin: 50% 50%;
-}
-
-@keyframes wave-move {
-  from { transform: translateX(0); }
-  to { transform: translateX(-25%); }
-}
-
-@keyframes wave-swell {
-  0% { transform: translateY(0) scaleY(1); }
-  50% { transform: translateY(-6px) scaleY(1.03); }
-  100% { transform: translateY(0) scaleY(1); }
-}
-
-/* Animate the waves subtly */
-.waves .wave-1 { animation: wave-move 18s linear infinite; }
-.waves .wave-2 { animation: wave-move 26s linear infinite reverse; opacity: 0.9; }
-.waves .wave-3 { animation: wave-move 34s linear infinite; opacity: 0.8; }
-.waves .swell { animation: wave-swell 8s ease-in-out infinite; }
-
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .waves .wave-1, .waves .wave-2, .waves .wave-3, .waves .swell { animation: none !important; }
 }
 
 /* Cards */
@@ -141,10 +70,10 @@
   border-radius: var(--radius-md);
   border: 1px solid var(--color-line);
   box-shadow: var(--shadow-card);
-  z-index: 3; /* on top of site-wave */
+  z-index: 3;
 }
 
-/* Button system: primary, secondary, ghost, icon */
+/* Button system */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -165,17 +94,17 @@
 .btn--primary {
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   color: white;
-  box-shadow: 0 8px 24px rgba(43,110,246,0.12);
+  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.18);
   border-color: transparent;
 }
 
-.btn--primary:hover { transform: translateY(-3px); }
+.btn--primary:hover { transform: translateY(-2px); }
 
 .btn--secondary {
-  background: linear-gradient(180deg, #ffffff, #fbfdff);
+  background: linear-gradient(180deg, #ffffff, #faf9fb);
   color: var(--color-ink);
   border: 1px solid var(--color-line);
-  box-shadow: 0 6px 16px rgba(15,23,36,0.04);
+  box-shadow: 0 6px 16px rgba(15, 14, 19, 0.03);
 }
 
 .btn--ghost {
@@ -204,23 +133,23 @@
   box-shadow: none;
 }
 
-/* Retro compatibility helpers: keep .retro-btn classname mapping */
-.retro-btn { /* keep for components using that class */ }
+.retro-btn { }
 .retro-btn-primary { }
 
-/* Inputs */
 .retro-field {
   width: 100%;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-line);
-  background: var(--color-surface-strong, #fbfdff);
+  background: #fdfcff;
   padding: 0.9rem 1rem;
   color: var(--color-ink);
   box-shadow: none;
 }
 
-/* Small responsive tweaks */
-@media (max-width: 640px) {
-  .waves { height: 180px; }
-  .hero { padding-top: 2rem; padding-bottom: 2rem; }
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
