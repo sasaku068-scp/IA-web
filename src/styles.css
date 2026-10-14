@@ -1,8 +1,6 @@
 @import "tailwindcss";
 
-/* Mosaium IA — noir + orange
-   Fond interactif de petites cases qui s’illuminent en orange.
-   Style sérieux, contrasté, pas “IA générique”. */
+/* Mosaium IA — noir + orange, animations fluides */
 
 @theme {
   --color-bg: #0a0a0b;
@@ -10,7 +8,7 @@
   --color-ink: #f4f4f5;
   --color-muted: #a1a1aa;
   --color-line: rgba(255, 255, 255, 0.08);
-  --color-primary: #f97316; /* orange vif */
+  --color-primary: #f97316;
   --color-primary-600: #ea580c;
   --color-primary-soft: rgba(249, 115, 22, 0.12);
   --color-accent: #fb923c;
@@ -53,6 +51,57 @@
   }
 }
 
+/* ——— animations ——— */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.fade-up-delay-1 {
+  animation-delay: 0.08s;
+}
+.fade-up-delay-2 {
+  animation-delay: 0.16s;
+}
+.fade-up-delay-3 {
+  animation-delay: 0.24s;
+}
+
 /* Cards */
 .card {
   background: var(--color-surface);
@@ -60,6 +109,12 @@
   border: 1px solid var(--color-line);
   box-shadow: var(--shadow-card);
   z-index: 3;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(249, 115, 22, 0.25);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(249, 115, 22, 0.08);
 }
 
 /* Buttons */
@@ -90,6 +145,7 @@
 .btn--primary:hover {
   background: var(--color-primary-600);
   box-shadow: 0 6px 28px rgba(249, 115, 22, 0.35);
+  transform: translateY(-1px);
 }
 
 .btn--secondary {
@@ -132,6 +188,45 @@
   background: var(--color-panel);
   padding: 0.85rem 1rem;
   color: var(--color-ink);
+  transition: border-color 0.2s ease;
+}
+
+.retro-field:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+/* nav links */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+  color: var(--color-muted);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.nav-link:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-ink);
+}
+
+.nav-link.is-active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.nav-link .tick {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.nav-link.is-active .tick {
+  background: var(--color-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {
