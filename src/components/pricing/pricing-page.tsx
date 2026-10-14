@@ -10,7 +10,7 @@ import { cn } from "@/lib/cn";
 
 function ModelChip({ model }: { model: CatalogEntry }) {
   return (
-    <div className="flex items-start gap-3 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-3 transition hover:border-[var(--color-primary)]/30">
+    <div className="flex items-start gap-3 rounded-xl border border-[var(--color-line)] bg-[var(--color-panel)] p-3 transition hover:border-[var(--color-primary)]/40">
       <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--color-primary-soft)] text-xs font-semibold text-[var(--color-primary)]">
         {model.name.slice(0, 2)}
       </div>
@@ -18,7 +18,7 @@ function ModelChip({ model }: { model: CatalogEntry }) {
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium text-[var(--color-ink)]">{model.name}</span>
           {model.category ? (
-            <span className="rounded-full bg-[var(--color-panel)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--color-muted)]">
+            <span className="rounded-full bg-[var(--color-surface)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--color-muted)]">
               {model.category}
             </span>
           ) : null}
@@ -40,20 +40,20 @@ function PlanCard({ planId }: { planId: PlanId }) {
       className={cn(
         "relative flex flex-col rounded-2xl border bg-[var(--color-surface)] p-6 shadow-[var(--shadow-card)] transition duration-200",
         isPlus
-          ? "border-[var(--color-primary)]/40 ring-1 ring-[var(--color-primary)]/20"
-          : "border-[var(--color-line)] hover:border-[var(--color-primary)]/25",
+          ? "border-[var(--color-primary)]/50 ring-1 ring-[var(--color-primary)]/20"
+          : "border-[var(--color-line)] hover:border-[var(--color-primary)]/30",
       )}
     >
       {isPlus && plan.badge ? (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-          <span className="inline-flex items-center rounded-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-sm">
+          <span className="inline-flex items-center rounded-full bg-[var(--color-primary)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#0a0a0b] shadow-sm">
             {plan.badge}
           </span>
         </div>
       ) : null}
 
       {isPlus ? (
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 rounded-t-2xl bg-gradient-to-b from-[var(--color-primary)]/8 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 rounded-t-2xl bg-gradient-to-b from-[var(--color-primary)]/10 to-transparent" />
       ) : null}
 
       <div className="relative">
@@ -138,8 +138,8 @@ function PlanCard({ planId }: { planId: PlanId }) {
             className={cn(
               "flex w-full items-center justify-center rounded-xl px-5 py-3.5 text-sm font-semibold transition",
               isPlus
-                ? "bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white shadow-md hover:opacity-95"
-                : "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-600)]",
+                ? "bg-[var(--color-primary)] text-[#0a0a0b] shadow-md hover:bg-[var(--color-primary-600)]"
+                : "bg-[var(--color-panel)] text-[var(--color-ink)] border border-[var(--color-line)] hover:border-[var(--color-primary)]/50",
             )}
           >
             {plan.cta}
@@ -179,7 +179,6 @@ const FAQ = [
 export function PricingPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-      {/* Intro */}
       <header className="mx-auto max-w-2xl text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-primary)]">
           Mosaium IA · Nos abonnements
@@ -192,13 +191,11 @@ export function PricingPage() {
         </p>
       </header>
 
-      {/* Cards */}
       <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:gap-6">
         <PlanCard planId="essentiel" />
         <PlanCard planId="plus" />
       </div>
 
-      {/* Comparison */}
       <section className="mt-20">
         <h2 className="text-center text-xl font-semibold text-[var(--color-ink)]">Comparatif rapide</h2>
         <div className="mt-8 overflow-x-auto rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)]">
@@ -246,7 +243,6 @@ export function PricingPage() {
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="mt-20">
         <h2 className="text-center text-xl font-semibold text-[var(--color-ink)]">Questions fréquentes</h2>
         <div className="mx-auto mt-8 max-w-2xl space-y-3">
