@@ -9,6 +9,7 @@ import { useAccountStore } from "@/lib/account-store";
 import { getAccount, providerStatus } from "@/lib/mosaium.functions";
 import { useMounted } from "@/lib/use-mounted";
 import { InteractiveGrid } from "@/components/ui/interactive-grid";
+import { PixelReveal } from "@/components/ui/pixel-reveal";
 
 function MenuBar() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
@@ -130,6 +131,7 @@ export function Shell({ children }: { children: ReactNode }) {
   const userId = user?.id ?? null;
   const setAccount = useAccountStore((state) => state.setAccount);
   const reset = useAccountStore((state) => state.reset);
+  const [revealDone, setRevealDone] = useState(false);
 
   useEffect(() => {
     if (!userId) {
@@ -151,6 +153,14 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="relative flex h-dvh flex-col bg-[var(--color-bg)] text-[var(--color-ink)]">
+      {!revealDone && (
+        <PixelReveal
+          cols={28}
+          rows={18}
+          duration={1.15}
+          onComplete={() => setRevealDone(true)}
+        />
+      )}
       <InteractiveGrid cellSize={26} gap={2} />
       <MenuBar />
       <div className="relative z-10 flex min-h-0 flex-1 flex-col md:flex-row">
